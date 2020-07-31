@@ -11,3 +11,4 @@ Intended as a digital version of the physical card resource suggested by Martin 
 
 - Speed slider
 - Note count number input
+- Optional sharps / flats toggle (e.g. allow `C♭`)
