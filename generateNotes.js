@@ -39,7 +39,7 @@ const formatNote = ([letter, mod] = '' /* 'D♭' */) => {
 
 const getRandomNoteSet = () => {
   const noteSet = Math.random() > 0.5 ? sharpSet : flatSet;
-  return shuffle(noteSet).slice(0, 5);
+  return shuffle(noteSet).slice(0, 6);
 }
 
 setNotes(getRandomNoteSet());
