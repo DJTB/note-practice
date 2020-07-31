@@ -29,7 +29,7 @@ const setNotes = (noteSet = []) => {
 const formatNote = ([letter, mod] = '' /* 'D♭' */) => {
   const color = randomColor({ luminosity: 'light' });
   const adjustMinMaxToScreen = `calc(1.5rem + 16 * (100vw - 320px) / (960 - 320))`;
-  const style = `display: grid; grid-template-columns: repeat(4, 1fr); font-size: ${adjustMinMaxToScreen}; align-items: bottom; color: ${color};`
+  const style = `display:flex; font-size:${adjustMinMaxToScreen}; justify-content:center; color:${color};`
 
   return `<div style="${style}">` +
     `<span>${letter}</span>` +
