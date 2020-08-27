@@ -1,14 +1,40 @@
 <!DOCTYPE html>
-<html lang="en" style="background-color: #2a2a2a;">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Note Practice</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100vh;
+      background-color: #2a2a2a;
+      color: #efe;
+    }
+
+    body {
+      height: 100%;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+    }
+
+  </style>
 </head>
-<body>
-  <main>
-    <h1 id="notes" style="max-width: 1000px; margin: 24px auto; display:grid; grid-template-columns: repeat(6, 1fr); align-items:center; align-content:center; justify-content:center;" />
-  </main>
-  <script type="module" src="./generateNotes.js"></script>
-</body>
+
+  <body>
+    <div>
+      <h1 id="notes" style="max-width: 1000px; margin: 24px auto; display:grid; grid-template-columns: repeat(6, 1fr); align-items:center; align-content:center; justify-content:center;" />
+    </div>
+    <div style="position: absolute; bottom: 10px; right: 10px;">
+      <input id="changeNoteSetIntervalDuration" type="number" min="0" max="100" value="10" />
+    </div>
+    <script type="module" src="./generateNotes.js"></script>
+  </body>
+
 </html>

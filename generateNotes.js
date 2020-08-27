@@ -1,6 +1,5 @@
 import randomColor from './randomColor.js';
 
-const TEN_SECONDS_IN_MS = 10000;
 
 const shuffle = ([...arr]) => {
   let m = arr.length;
@@ -18,8 +17,6 @@ const flats = omitBy(neutrals, ['C', 'F']).map(note => note + '♭');
 
 const sharpSet = [...neutrals, ...sharps];
 const flatSet = [...neutrals, ...flats];
-
-console.log(document, sharpSet, flatSet);
 
 const setNotes = (noteSet = []) => {
   const el = document.getElementById('notes');
@@ -42,5 +39,20 @@ const getRandomNoteSet = () => {
   return shuffle(noteSet).slice(0, 6);
 }
 
+const initChangeNoteSet = (durationInSeconds = 10) => {
+  window.changeNoteSetIntervalDuration = durationInSeconds;
+  clearInterval(window.changeNoteSetIntervalRef);
+  window.changeNoteSetIntervalRef = setInterval(() => setNotes(getRandomNoteSet()), durationInSeconds * 1000);
+}
+
+const watchForChangeNoteSetDuration = () => {
+  const duration = parseInt(document.getElementById('changeNoteSetIntervalDuration').value, 10);
+  console.log(duration, window.changeNoteSetIntervalDuration)
+  if (duration !== window.changeNoteSetIntervalDuration) {
+    initChangeNoteSet(duration);
+  }
+}
+
 setNotes(getRandomNoteSet());
-setInterval(() => setNotes(getRandomNoteSet()), TEN_SECONDS_IN_MS);
+initChangeNoteSet();
+setInterval(() => watchForChangeNoteSetDuration(), 500);
