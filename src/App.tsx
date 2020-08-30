@@ -92,7 +92,8 @@ const formatDelay = (timerDelay: number | null): number => {
 // seconds -> ms | null
 const parseDelay = (timerDelay: number | string): number | null => {
   const num = parseInt(timerDelay as string, 10);
-  return num === 0 ? null : num * 1000;
+  const shouldReset = !Number.isFinite(num) || num === 0;
+  return shouldReset ? null : num * 1000;
 };
 
 export default App;
