@@ -3,33 +3,35 @@ import { useInterval } from 'ahooks';
 
 import './global.css';
 
+import { DEFAULT_COUNT, DEFAULT_FILTER } from './consts';
 import { Notes } from './components/Notes';
-import { getRandomNoteSet, NoteSetFilter, NoteSetCount } from './utils/generateNotes';
+import { Filter } from './components/Filter';
+import { Timer } from './components/Timer';
+import { Count } from './components/Count';
+
+import { getShuffledNoteSet, NoteSetFilter } from './utils/noteHelpers';
 
 const App = () => {
-  const [count, setCount] = useState<NoteSetCount>(6);
-  const [delay, setDelay] = useState<number | null>(null);
-  const [filter, setFilter] = useState<NoteSetFilter>('any');
-  const [notes, setNotes] = useState(getRandomNoteSet({ filter, count }));
+  const [count, setCount] = useState(DEFAULT_COUNT);
+  const [filter, setFilter] = useState<NoteSetFilter>(DEFAULT_FILTER);
+  const [notes, setNotes] = useState(getShuffledNoteSet({ filter, count }));
+
+  // null pauses timer
+  const [timerDelay, setTimerDelay] = useState<number | null>(null);
 
   const changeNotes = useCallback(
-    (overrides = {}) => setNotes(getRandomNoteSet({ filter, count, ...overrides })),
+    (overrides = {}) => setNotes(getShuffledNoteSet({ filter, count, ...overrides })),
     [filter, count, setNotes]
   );
 
-  const parseDelay = (delay: number) => (delay === 0 ? null : delay * 1000);
+  const handleDelayChange = useCallback(
+    ({ target }) => {
+      setTimerDelay(parseDelay(target.value));
+    },
+    [setTimerDelay]
+  );
 
-  const formatDelay = (delay: number | null) => {
-    if (delay === null) {
-      return 0;
-    }
-    // use floor to avoid decimal result due to 1ms addition in handleTap()
-    return Math.floor(delay / 1000);
-  };
-
-  const changeDelay = useCallback(({ target }) => setDelay(parseDelay(target.value)), [setDelay]);
-
-  const changeCount = useCallback(
+  const handleCountChange = useCallback(
     ({ target }) => {
       const count = target.value;
       setCount(count);
@@ -38,7 +40,7 @@ const App = () => {
     [setCount, changeNotes]
   );
 
-  const changeFilter = useCallback(
+  const handleFilterChange = useCallback(
     ({ target }) => {
       const filter = target.value;
       setFilter(filter);
@@ -48,74 +50,49 @@ const App = () => {
   );
 
   const handleTap = useCallback(() => {
-    if (delay) {
-      // if the delay is the same we won't get a value change
-      // we'll force interval to reset by adding 1ms
-      setDelay(delay + 1);
+    if (timerDelay !== null) {
+      // force interval to reset by adding 1ms in case value was the same
+      setTimerDelay(timerDelay + 1);
     } else {
       changeNotes();
     }
-  }, [changeNotes, delay]);
+  }, [changeNotes, timerDelay, setTimerDelay]);
 
-  useInterval(changeNotes, delay, { immediate: true });
+  useInterval(changeNotes, timerDelay, { immediate: true });
 
   return (
     <div className="flex flex-col flex-1">
-      <div className="flex-1 w-full max-w-6xl p-4 mx-auto" onClick={handleTap}>
+      <div className="flex-1 w-full max-w-6xl p-4 mx-auto select-none" onClick={handleTap}>
         <Notes notes={notes} />
       </div>
-      <div className="pb-4 text-sm italic text-center text-gray-100 opacity-25">
+      <div className="my-4 text-sm italic text-center text-gray-100 opacity-25">
         Tap screen to refresh notes
       </div>
       <div className="grid grid-rows-3 px-4 pt-4 bg-gray-700 md:grid-cols-3 md:grid-rows-1">
         <div className="flex justify-center mb-4 md:justify-start">
-          <label className="mr-2 text-gray-400" htmlFor="note-filter">
-            Notes:
-          </label>
-          <select
-            className="px-1 rounded-sm"
-            name="note-filter"
-            value={filter}
-            onChange={changeFilter}
-          >
-            <option value="any">Any</option>
-            <option value="naturals">Naturals Only</option>
-            <option value="sharps">Naturals + Sharps</option>
-            <option value="flats">Naturals + Flats</option>
-          </select>
+          <Filter value={filter} onChange={handleFilterChange} />
         </div>
         <div className="flex justify-center mb-4 ">
-          <label className="mr-2 text-gray-400" htmlFor="note-timer">
-            Refresh Timer:
-          </label>
-          <input
-            className="w-12 px-1 rounded-sm"
-            name="note-timer"
-            type="number"
-            min={0}
-            max={60}
-            step={1}
-            value={formatDelay(delay)}
-            onChange={changeDelay}
-          />
+          <Timer value={formatDelay(timerDelay)} onChange={handleDelayChange} />
         </div>
         <div className="flex justify-center mb-4 md:justify-end">
-          <label className="mr-2 text-gray-400" htmlFor="note-count">
-            Count:
-          </label>
-          <input
-            className="w-10 px-1 rounded-sm"
-            name="note-count"
-            type="number"
-            min={1}
-            max={12}
-            value={count}
-            onChange={changeCount}
-          />
+          <Count value={count} onChange={handleCountChange} />
         </div>
       </div>
     </div>
   );
+};
+
+// ms -> seconds
+// returns floored integer(to strip trailing digit ms)
+const formatDelay = (timerDelay: number | null): number => {
+  return timerDelay === null ? 0 : Math.floor(timerDelay / 1000);
+};
+
+// seconds -> ms | null
+const parseDelay = (timerDelay: number | string): number | null => {
+  const num = parseInt(timerDelay as string, 10);
+  return num === 0 ? null : num * 1000;
 };
 
 export default App;

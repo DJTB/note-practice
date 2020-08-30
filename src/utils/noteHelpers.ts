@@ -1,25 +1,26 @@
 import { omitBy } from './omitBy';
 import { shuffle } from './shuffle';
 
-export type NoteSet = string[];
+export type NoteLetter = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G';
+export type NoteMod = '♯' | '♭';
+
 export type NoteSetFilter = 'any' | 'naturals' | 'sharps' | 'flats';
-export type NoteSetCount = number;
 
 export type NoteSetConfig = {
   filter?: NoteSetFilter;
-  count?: NoteSetCount;
+  count?: number;
 };
 
-const NATURAL_NOTES = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+const NATURAL_NOTES: NoteLetter[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
 const SHARP_NOTES = omitBy(NATURAL_NOTES, ['B', 'E']).map((note) => note + '♯');
 const FLAT_NOTES = omitBy(NATURAL_NOTES, ['C', 'F']).map((note) => note + '♭');
 
-const getNaturalSet = () => [...NATURAL_NOTES];
-const getSharpSet = () => [...getNaturalSet(), ...SHARP_NOTES];
-const getFlatSet = () => [...getNaturalSet(), ...FLAT_NOTES];
-const getRandomSet = () => (Math.random() > 0.5 ? getSharpSet() : getFlatSet());
+export const getNaturalSet = () => [...NATURAL_NOTES];
+export const getSharpSet = () => [...getNaturalSet(), ...SHARP_NOTES];
+export const getFlatSet = () => [...getNaturalSet(), ...FLAT_NOTES];
+export const getRandomSet = () => (Math.random() > 0.5 ? getSharpSet() : getFlatSet());
 
-const getNoteSet = (key: NoteSetFilter) => {
+export const getNoteSet = (key: NoteSetFilter) => {
   switch (key) {
     case 'any':
       return getRandomSet();
@@ -33,6 +34,7 @@ const getNoteSet = (key: NoteSetFilter) => {
       return getRandomSet();
   }
 };
-export const getRandomNoteSet = ({ filter = 'any', count = 6 }: NoteSetConfig = {}): NoteSet => {
+
+export const getShuffledNoteSet = ({ filter = 'any', count = 6 }: NoteSetConfig = {}) => {
   return shuffle(getNoteSet(filter)).slice(0, count);
 };

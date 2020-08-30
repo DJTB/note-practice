@@ -1,19 +1,13 @@
-import React from 'react';
-import type { NoteSet } from '../utils/generateNotes';
+import React, { FC } from 'react';
 
-const colors: { [key: string]: string } = {
-  A: 'text-blue-400',
-  B: 'text-purple-400',
-  C: 'text-red-400',
-  D: 'text-yellow-400',
-  E: 'text-orange-400',
-  F: 'text-green-400',
-  G: 'text-teal-400',
-};
+import { NOTE_COLORS } from '../consts';
+import type { NoteLetter, NoteMod } from '../utils/noteHelpers';
 
-export const Note = ({ note = '' }) => {
-  const [letter, mod] = note;
-  const textColor = colors[letter];
+export const Note: FC<{ note: string }> = ({ note = '' }) => {
+  const letter = note[0] as NoteLetter;
+  const mod = note[1] as NoteMod | undefined;
+
+  const textColor = `text-${NOTE_COLORS[letter]}-400`;
 
   return (
     <div className={`flex content-center justify-center text-auto-size ${textColor}`}>
@@ -23,7 +17,7 @@ export const Note = ({ note = '' }) => {
   );
 };
 
-export const Notes = ({ notes = [] }: { notes: NoteSet }) => {
+export const Notes: FC<{ notes: string[] }> = ({ notes = [] }) => {
   return (
     <div className="flex items-center content-center justify-evenly row-wrap">
       {notes.map((n, i) => (
