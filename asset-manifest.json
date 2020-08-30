@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/note-practice/static/css/main.8532d014.chunk.css",
+    "main.js": "/note-practice/static/js/main.d8919415.chunk.js",
+    "main.js.map": "/note-practice/static/js/main.d8919415.chunk.js.map",
+    "runtime-main.js": "/note-practice/static/js/runtime-main.b2da3c55.js",
+    "runtime-main.js.map": "/note-practice/static/js/runtime-main.b2da3c55.js.map",
+    "static/js/2.d35c9ec1.chunk.js": "/note-practice/static/js/2.d35c9ec1.chunk.js",
+    "static/js/2.d35c9ec1.chunk.js.map": "/note-practice/static/js/2.d35c9ec1.chunk.js.map",
+    "index.html": "/note-practice/index.html",
+    "precache-manifest.4d8ed850b7562618615bc7af3b4de2a2.js": "/note-practice/precache-manifest.4d8ed850b7562618615bc7af3b4de2a2.js",
+    "service-worker.js": "/note-practice/service-worker.js",
+    "static/css/main.8532d014.chunk.css.map": "/note-practice/static/css/main.8532d014.chunk.css.map",
+    "static/js/2.d35c9ec1.chunk.js.LICENSE.txt": "/note-practice/static/js/2.d35c9ec1.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.b2da3c55.js",
+    "static/js/2.d35c9ec1.chunk.js",
+    "static/css/main.8532d014.chunk.css",
+    "static/js/main.d8919415.chunk.js"
+  ]
+}
