@@ -3,9 +3,7 @@ import { useWindowSize, useInterval } from 'react-use';
 
 import { DEFAULT_COUNT, DEFAULT_FILTER } from './consts';
 import { Notes } from './components/Notes';
-import { Filter } from './components/Filter';
-import { Timer } from './components/Timer';
-import { Count } from './components/Count';
+import { Settings } from './components/Settings';
 
 import { getShuffledNoteSet, NoteSetFilter } from './utils/noteHelpers';
 
@@ -21,31 +19,6 @@ const App = () => {
   const changeNotes = useCallback(
     (overrides = {}) => setNotes(getShuffledNoteSet({ filter, count, ...overrides })),
     [filter, count, setNotes]
-  );
-
-  const handleDelayChange = useCallback(
-    ({ target }) => {
-      setTimerDelay(parseDelay(target.value));
-    },
-    [setTimerDelay]
-  );
-
-  const handleCountChange = useCallback(
-    ({ target }) => {
-      const count = target.value;
-      setCount(count);
-      changeNotes({ count });
-    },
-    [setCount, changeNotes]
-  );
-
-  const handleFilterChange = useCallback(
-    ({ target }) => {
-      const filter = target.value;
-      setFilter(filter);
-      changeNotes({ filter });
-    },
-    [setFilter, changeNotes]
   );
 
   const handleTap = useCallback(() => {
@@ -67,31 +40,18 @@ const App = () => {
         Tap screen to refresh notes
       </div>
       <div className="grid grid-rows-3 px-4 pt-4 bg-gray-700 md:grid-cols-3 md:grid-rows-1">
-        <div className="flex justify-center mb-4 md:justify-start">
-          <Filter value={filter} onChange={handleFilterChange} />
-        </div>
-        <div className="flex justify-center mb-4 ">
-          <Timer value={formatDelay(timerDelay)} onChange={handleDelayChange} />
-        </div>
-        <div className="flex justify-center mb-4 md:justify-end">
-          <Count value={count} onChange={handleCountChange} />
-        </div>
+        <Settings
+          count={count}
+          filter={filter}
+          timerDelay={timerDelay}
+          setFilter={setFilter}
+          setTimerDelay={setTimerDelay}
+          setCount={setCount}
+          changeNotes={changeNotes}
+        />
       </div>
     </div>
   );
-};
-
-// ms -> seconds
-// returns floored integer(to strip trailing digit ms)
-const formatDelay = (timerDelay: number | null): number => {
-  return timerDelay === null ? 0 : Math.floor(timerDelay / 1000);
-};
-
-// seconds -> ms | null
-const parseDelay = (timerDelay: number | string): number | null => {
-  const num = parseInt(timerDelay as string, 10);
-  const shouldReset = !Number.isFinite(num) || num <= 0;
-  return shouldReset ? null : num * 1000;
 };
 
 export default App;

@@ -1,5 +1,5 @@
 import React, { ChangeEventHandler, FC, useRef } from 'react';
-import { SettingsLabel } from './SettingsLabel';
+import { Label } from './Label';
 
 export const Timer: FC<{
   value: number;
@@ -9,7 +9,7 @@ export const Timer: FC<{
 
   return (
     <>
-      <SettingsLabel name="note-timer">Refresh Timer:</SettingsLabel>
+      <Label name="note-timer">Refresh Timer:</Label>
       <input
         ref={inputRef}
         className="w-12 px-1 rounded-sm"

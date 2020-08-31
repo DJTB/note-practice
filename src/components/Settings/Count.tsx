@@ -1,5 +1,5 @@
 import React, { ChangeEventHandler, FC, useRef } from 'react';
-import { SettingsLabel } from './SettingsLabel';
+import { Label } from './Label';
 
 export const Count: FC<{
   value: number;
@@ -9,7 +9,7 @@ export const Count: FC<{
 
   return (
     <>
-      <SettingsLabel name="note-count">Count:</SettingsLabel>
+      <Label name="note-count">Count:</Label>
       <input
         ref={inputRef}
         className="w-10 px-1 rounded-sm"
