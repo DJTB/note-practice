@@ -1,7 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { useInterval } from 'ahooks';
-
-import './global.css';
+import { useWindowSize, useInterval } from 'react-use';
 
 import { DEFAULT_COUNT, DEFAULT_FILTER } from './consts';
 import { Notes } from './components/Notes';
@@ -12,6 +10,7 @@ import { Count } from './components/Count';
 import { getShuffledNoteSet, NoteSetFilter } from './utils/noteHelpers';
 
 const App = () => {
+  const windowSize = useWindowSize();
   const [count, setCount] = useState(DEFAULT_COUNT);
   const [filter, setFilter] = useState<NoteSetFilter>(DEFAULT_FILTER);
   const [notes, setNotes] = useState(getShuffledNoteSet({ filter, count }));
@@ -53,15 +52,14 @@ const App = () => {
     if (timerDelay !== null) {
       // force interval to reset by adding 1ms in case value was the same
       setTimerDelay(timerDelay + 1);
-    } else {
-      changeNotes();
     }
+    changeNotes();
   }, [changeNotes, timerDelay, setTimerDelay]);
 
-  useInterval(changeNotes, timerDelay, { immediate: true });
+  useInterval(changeNotes, timerDelay);
 
   return (
-    <div className="flex flex-col flex-1">
+    <div className="flex flex-col bg-gray-900" style={{ height: windowSize.height }}>
       <div className="flex-1 w-full max-w-6xl p-4 mx-auto select-none" onClick={handleTap}>
         <Notes notes={notes} />
       </div>
