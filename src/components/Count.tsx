@@ -19,7 +19,11 @@ export const Count: FC<{
         max={12}
         value={value}
         onChange={onChange}
-        onSubmit={() => inputRef.current?.blur()}
+        onKeyUp={(ev) => {
+          if (ev.key === 'Enter') {
+            inputRef.current?.blur();
+          }
+        }}
       />
     </>
   );
