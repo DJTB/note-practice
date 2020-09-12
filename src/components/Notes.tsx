@@ -9,7 +9,7 @@ export const Note: FC<{
   color: string;
 }> = ({ letter, mod, color }) => {
   const textColor = `text-${color}-400`;
-  const wrapperClasses = `flex content-center justify-center text-auto-size ${textColor}`;
+  const wrapperClasses = `flex content-center justify-center text-auto-size w-32 ${textColor}`;
   const modStyle = { lineHeight: 'inherit', top: 0, fontSize: '0.5em' };
 
   /* we render 2 mods to ensure perfect spacing, but only show the right one when relevant */
@@ -28,7 +28,7 @@ export const Note: FC<{
 
 export const Notes: FC<{ notes: string[] }> = ({ notes = [] }) => {
   return (
-    <div className="grid items-center content-center grid-cols-6 justify-evenly">
+    <div className="flex flex-wrap items-center content-center justify-center gap-4">
       {notes.map((note, index) => {
         const letter = note[0] as NoteLetter;
         const mod = note[1] as NoteMod | undefined;

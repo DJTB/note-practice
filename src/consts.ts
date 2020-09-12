@@ -1,7 +1,12 @@
 import { NoteSetFilter } from './utils/noteHelpers';
 
-export const DEFAULT_COUNT = 6;
-export const DEFAULT_FILTER: NoteSetFilter = 'any';
+export const DEFAULT_NOTES_COUNT = 12;
+export const NATURAL_NOTES_COUNT = 7;
+export const MAX_NOTES_COUNT = 12;
+
+export const DEFAULT_NOTES_FILTER: NoteSetFilter = 'any';
+
+export const TIMER_MAX_SECONDS = 60;
 
 export const NOTE_COLORS = {
   A: 'blue',
@@ -12,3 +17,11 @@ export const NOTE_COLORS = {
   F: 'green',
   G: 'teal',
 } as const;
+
+export const NOTE_FILTERS: { label: string; value: NoteSetFilter }[] = [
+  { label: 'All Notes', value: 'any' },
+  { label: 'Naturals Only', value: 'naturals' },
+  { label: 'Naturals + Sharps', value: 'sharps' },
+  { label: 'Naturals + Flats', value: 'flats' },
+  { label: 'Inversion Groups', value: 'inversions' },
+];

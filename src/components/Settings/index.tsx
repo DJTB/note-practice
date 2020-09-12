@@ -1,32 +1,29 @@
-// ms -> seconds
+import React, { useCallback, Dispatch, SetStateAction, FC, memo } from 'react';
 
-import React, { useCallback, Dispatch, SetStateAction, FC } from 'react';
 import { Filter } from './Filter';
 import { Timer } from './Timer';
 import { Count } from './Count';
-import { NoteSetFilter } from '../../utils/noteHelpers';
 
-// returns floored integer (to strip trailing digit ms)
-const formatDelay = (timerDelay: number | null): number => {
-  return timerDelay === null ? 0 : Math.floor(timerDelay / 1000);
-};
+import { NoteSetFilter } from '../../utils/noteHelpers';
+import { NATURAL_NOTES_COUNT, MAX_NOTES_COUNT } from '../../consts';
 
 // seconds -> ms | null
-const parseDelay = (timerDelay: number | string): number | null => {
-  const num = parseInt(timerDelay as string, 10);
-  const shouldReset = !Number.isFinite(num) || num <= 0;
-  return shouldReset ? null : num * 1000;
+const parseDelay = (timerDelay: string): number | null => {
+  const val = parseInt(timerDelay);
+  const shouldReset = !Number.isFinite(val) || val <= 0;
+  return shouldReset ? null : val * 1000;
 };
 
 export const Settings: FC<{
   filter: NoteSetFilter;
   count: number;
-  timerDelay: number | null;
   setTimerDelay: Dispatch<SetStateAction<number | null>>;
   setCount: Dispatch<SetStateAction<number>>;
   setFilter: Dispatch<SetStateAction<NoteSetFilter>>;
   changeNotes: (overrides?: { filter?: number; count?: number }) => void;
-}> = ({ filter, count, timerDelay, setTimerDelay, setCount, setFilter, changeNotes }) => {
+}> = memo(({ filter, count, setTimerDelay, setCount, setFilter, changeNotes }) => {
+  const maxNoteCount = filter === 'naturals' ? NATURAL_NOTES_COUNT : MAX_NOTES_COUNT;
+
   const handleDelayChange = useCallback(
     ({ target }) => {
       setTimerDelay(parseDelay(target.value));
@@ -58,11 +55,11 @@ export const Settings: FC<{
         <Filter value={filter} onChange={handleFilterChange} />
       </div>
       <div className="flex justify-center mb-4 ">
-        <Timer value={formatDelay(timerDelay)} onChange={handleDelayChange} />
+        <Timer onChange={handleDelayChange} />
       </div>
       <div className="flex justify-center mb-4 md:justify-end">
-        <Count value={count} onChange={handleCountChange} />
+        <Count value={count} max={maxNoteCount} onChange={handleCountChange} />
       </div>
     </>
   );
-};
+});

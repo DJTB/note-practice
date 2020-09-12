@@ -1,23 +1,23 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useWindowSize, useInterval } from 'react-use';
 
-import { DEFAULT_COUNT, DEFAULT_FILTER } from './consts';
+import { DEFAULT_NOTES_COUNT, DEFAULT_NOTES_FILTER, NATURAL_NOTES_COUNT } from './consts';
 import { Notes } from './components/Notes';
 import { Settings } from './components/Settings';
 
-import { getShuffledNoteSet, NoteSetFilter } from './utils/noteHelpers';
+import { getNotes, NoteSetFilter } from './utils/noteHelpers';
 
 const App = () => {
   const windowSize = useWindowSize();
-  const [count, setCount] = useState(DEFAULT_COUNT);
-  const [filter, setFilter] = useState<NoteSetFilter>(DEFAULT_FILTER);
-  const [notes, setNotes] = useState(getShuffledNoteSet({ filter, count }));
+  const [count, setCount] = useState(DEFAULT_NOTES_COUNT);
+  const [filter, setFilter] = useState<NoteSetFilter>(DEFAULT_NOTES_FILTER);
+  const [notes, setNotes] = useState(getNotes({ filter, count }));
 
   // null pauses timer
   const [timerDelay, setTimerDelay] = useState<number | null>(null);
 
   const changeNotes = useCallback(
-    (overrides = {}) => setNotes(getShuffledNoteSet({ filter, count, ...overrides })),
+    (overrides = {}) => setNotes(getNotes({ filter, count, ...overrides })),
     [filter, count, setNotes]
   );
 
@@ -29,6 +29,13 @@ const App = () => {
     changeNotes();
   }, [changeNotes, timerDelay, setTimerDelay]);
 
+  // reduce count if filter returns less notes
+  useEffect(() => {
+    if (filter === 'naturals' && count > NATURAL_NOTES_COUNT) {
+      setCount(NATURAL_NOTES_COUNT);
+    }
+  }, [filter, count]);
+
   useInterval(changeNotes, timerDelay);
 
   return (
@@ -39,11 +46,10 @@ const App = () => {
       <div className="my-4 text-sm italic text-center text-gray-100 opacity-25">
         Tap screen to refresh notes
       </div>
-      <div className="grid grid-rows-3 px-4 pt-4 bg-gray-700 md:grid-cols-3 md:grid-rows-1">
+      <div className="grid grid-rows-3 px-4 pt-4 bg-gray-300 md:grid-cols-3 md:grid-rows-1">
         <Settings
           count={count}
           filter={filter}
-          timerDelay={timerDelay}
           setFilter={setFilter}
           setTimerDelay={setTimerDelay}
           setCount={setCount}
