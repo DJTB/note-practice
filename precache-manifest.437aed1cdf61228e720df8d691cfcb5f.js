@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "c0f0b50167ca36c7b52d958729148478",
+    "revision": "48c7a84f710f27952192901a22a47cbc",
     "url": "/note-practice/index.html"
   },
   {
-    "revision": "5110c7051b3fd7089b40",
+    "revision": "140d67b409ca59d90bbe",
     "url": "/note-practice/static/css/main.90004068.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/note-practice/static/js/2.a8d8162c.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "5110c7051b3fd7089b40",
-    "url": "/note-practice/static/js/main.5b59b314.chunk.js"
+    "revision": "140d67b409ca59d90bbe",
+    "url": "/note-practice/static/js/main.54d5f869.chunk.js"
   },
   {
     "revision": "da22270942f7ef50d00b",
