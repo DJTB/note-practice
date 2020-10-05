@@ -24,4 +24,5 @@ export const NOTE_FILTERS: { label: string; value: NoteSetFilter }[] = [
   { label: 'Naturals + Sharps', value: 'sharps' },
   { label: 'Naturals + Flats', value: 'flats' },
   { label: 'Inversion Groups', value: 'inversions' },
+  { label: 'The Sequence', value: 'sequence' },
 ];
