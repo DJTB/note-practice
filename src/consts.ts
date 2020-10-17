@@ -38,8 +38,8 @@ export const NOTE_FILTERS: { label: string; value: NoteSetFilter }[] = [
   { label: 'Naturals + Sharps', value: 'sharps' },
   { label: 'Inversion Groups', value: 'inversions' },
   { label: 'Fifths', value: 'fifths' },
-  { label: 'Fifths (Flats)', value: 'fifths-flats' },
-  { label: 'Fifths (Sharps)', value: 'fifths-sharps' },
+  // { label: 'Fifths (Flats)', value: 'fifths-flats' },
+  // { label: 'Fifths (Sharps)', value: 'fifths-sharps' },
 ];
 
 export const NATURAL_NOTES: NoteLetter[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
@@ -54,5 +54,7 @@ export const INVERSION_GROUPS = [
 ];
 
 export const CIRCLE_OF_FIFTHS = ['C', 'F', 'Bb', 'Eb', 'Ab', 'Db', 'Gb', 'B', 'E', 'A', 'D', 'G'];
+/* Are these all Major? */
+/* Are these actually in the right order ?*/
 export const CIRCLE_OF_FIFTHS_FLATS = ['C', 'F', 'Bb', 'Eb', 'Ab', 'Db', 'Gb', 'Cb'];
 export const CIRCLE_OF_FIFTHS_SHARPS = ['C', 'G', 'D', 'A', 'E', 'B', 'F#', 'C#'];
