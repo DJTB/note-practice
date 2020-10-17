@@ -1,10 +1,15 @@
-import { omitBy } from './omitBy';
+import {
+  CIRCLE_OF_FIFTHS,
+  CIRCLE_OF_FIFTHS_FLATS,
+  CIRCLE_OF_FIFTHS_SHARPS,
+  FLAT_NOTES,
+  INVERSION_GROUPS,
+  NATURAL_NOTES,
+  SHARP_NOTES,
+  NoteSetFilter,
+} from '../consts';
+
 import { shuffle } from './shuffle';
-
-export type NoteLetter = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G';
-export type NoteMod = '♯' | '♭';
-
-export type NoteSetFilter = 'any' | 'naturals' | 'sharps' | 'flats' | 'inversions' | 'sequence';
 
 export type NoteSetConfig = {
   filter?: NoteSetFilter;
@@ -12,42 +17,43 @@ export type NoteSetConfig = {
   randomize?: boolean;
 };
 
-const NATURAL_NOTES: NoteLetter[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
-const SHARP_NOTES = omitBy(NATURAL_NOTES, ['B', 'E']).map((note) => note + '♯');
-const FLAT_NOTES = omitBy(NATURAL_NOTES, ['C', 'F']).map((note) => note + '♭');
+export const getOctaveSet = ({ flats = false, sharps = false } = {}) => {
+  if (flats) return [...NATURAL_NOTES, ...FLAT_NOTES];
+  if (sharps) return [...NATURAL_NOTES, ...SHARP_NOTES];
+  return [...NATURAL_NOTES];
+};
 
-const INVERSION_GROUPS = [
-  ['C', 'F', 'G'],
-  ['A', 'D', 'E'],
-  ['Ab', 'Db', 'Eb'],
-  ['B', 'Bb', 'Gb'],
-];
-
-const SEQUENCE_SET = ['C', 'F', 'Bb', 'Eb', 'Ab', 'Db', 'Gb', 'B', 'E', 'A', 'D', 'G'];
-
-export const getNaturalSet = () => [...NATURAL_NOTES];
-export const getSharpSet = () => [...getNaturalSet(), ...SHARP_NOTES];
-export const getFlatSet = () => [...getNaturalSet(), ...FLAT_NOTES];
+export const getRandomSet = () => {
+  const useFlats = Math.random() > 0.5;
+  return getOctaveSet({ flats: useFlats, sharps: !useFlats });
+};
 
 export const getInversionSets = () => [...INVERSION_GROUPS];
-export const getSequenceSet = () => [...SEQUENCE_SET];
 
-export const getRandomSet = () => (Math.random() > 0.5 ? getSharpSet() : getFlatSet());
+export const getFifthsSet = ({ flats = false, sharps = false } = {}) => {
+  if (flats) return [...CIRCLE_OF_FIFTHS_FLATS];
+  if (sharps) return [...CIRCLE_OF_FIFTHS_SHARPS];
+  return [...CIRCLE_OF_FIFTHS];
+};
 
 export const getNoteSet = (key: NoteSetFilter) => {
   switch (key) {
     case 'any':
       return shuffle(getRandomSet());
     case 'naturals':
-      return shuffle(getNaturalSet());
-    case 'sharps':
-      return shuffle(getSharpSet());
+      return shuffle(getOctaveSet());
     case 'flats':
-      return shuffle(getFlatSet());
+      return shuffle(getOctaveSet({ flats: true }));
+    case 'sharps':
+      return shuffle(getOctaveSet({ sharps: true }));
     case 'inversions':
       return getInversionSets().flatMap((set) => shuffle(set));
-    case 'sequence':
-      return getSequenceSet();
+    case 'fifths':
+      return getFifthsSet({});
+    case 'fifths-flats':
+      return getFifthsSet({ flats: true });
+    case 'fifths-sharps':
+      return getFifthsSet({ sharps: true });
   }
 };
 

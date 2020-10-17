@@ -1,4 +1,17 @@
-import { NoteSetFilter } from './utils/noteHelpers';
+import { omitBy } from './utils/omitBy';
+
+export type NoteLetter = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G';
+export type NoteMod = '♯' | '♭';
+
+export type NoteSetFilter =
+  | 'any'
+  | 'naturals'
+  | 'sharps'
+  | 'flats'
+  | 'inversions'
+  | 'fifths'
+  | 'fifths-flats'
+  | 'fifths-sharps';
 
 export const DEFAULT_NOTES_COUNT = 12;
 export const NATURAL_NOTES_COUNT = 7;
@@ -19,10 +32,27 @@ export const NOTE_COLORS = {
 } as const;
 
 export const NOTE_FILTERS: { label: string; value: NoteSetFilter }[] = [
-  { label: 'All Notes', value: 'any' },
+  { label: 'Any', value: 'any' },
   { label: 'Naturals Only', value: 'naturals' },
-  { label: 'Naturals + Sharps', value: 'sharps' },
   { label: 'Naturals + Flats', value: 'flats' },
+  { label: 'Naturals + Sharps', value: 'sharps' },
   { label: 'Inversion Groups', value: 'inversions' },
-  { label: 'The Sequence', value: 'sequence' },
+  { label: 'Fifths', value: 'fifths' },
+  { label: 'Fifths (Flats)', value: 'fifths-flats' },
+  { label: 'Fifths (Sharps)', value: 'fifths-sharps' },
 ];
+
+export const NATURAL_NOTES: NoteLetter[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+export const SHARP_NOTES = omitBy(NATURAL_NOTES, ['B', 'E']).map((note) => note + '♯');
+export const FLAT_NOTES = omitBy(NATURAL_NOTES, ['C', 'F']).map((note) => note + '♭');
+
+export const INVERSION_GROUPS = [
+  ['C', 'F', 'G'],
+  ['A', 'D', 'E'],
+  ['Ab', 'Db', 'Eb'],
+  ['B', 'Bb', 'Gb'],
+];
+
+export const CIRCLE_OF_FIFTHS = ['C', 'F', 'Bb', 'Eb', 'Ab', 'Db', 'Gb', 'B', 'E', 'A', 'D', 'G'];
+export const CIRCLE_OF_FIFTHS_FLATS = ['C', 'F', 'Bb', 'Eb', 'Ab', 'Db', 'Gb', 'Cb'];
+export const CIRCLE_OF_FIFTHS_SHARPS = ['C', 'G', 'D', 'A', 'E', 'B', 'F#', 'C#'];

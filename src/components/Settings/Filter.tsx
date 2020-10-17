@@ -1,8 +1,7 @@
 import React, { ChangeEventHandler, FC } from 'react';
 import { MenuItem, TextField } from '@material-ui/core';
 
-import { NOTE_FILTERS } from '../../consts';
-import { NoteSetFilter } from '../../utils/noteHelpers';
+import { NOTE_FILTERS, NoteSetFilter } from '../../consts';
 
 export const Filter: FC<{
   value: NoteSetFilter;

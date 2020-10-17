@@ -1,11 +1,10 @@
 import React, { useCallback, Dispatch, SetStateAction, FC, memo } from 'react';
 
+import { NATURAL_NOTES_COUNT, MAX_NOTES_COUNT, NoteSetFilter } from '../../consts';
+
 import { Filter } from './Filter';
 import { Timer } from './Timer';
 import { Count } from './Count';
-
-import { NoteSetFilter } from '../../utils/noteHelpers';
-import { NATURAL_NOTES_COUNT, MAX_NOTES_COUNT } from '../../consts';
 
 // seconds -> ms | null
 const parseDelay = (timerDelay: string): number | null => {

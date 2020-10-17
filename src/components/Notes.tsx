@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 
-import { NOTE_COLORS } from '../consts';
-import type { NoteLetter, NoteMod } from '../utils/noteHelpers';
+import { NOTE_COLORS, NoteLetter, NoteMod } from '../consts';
 
 export const Notes: FC<{ notes: string[] }> = ({ notes = [] }) => {
   return (

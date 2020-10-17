@@ -1,11 +1,11 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useWindowSize, useInterval } from 'react-use';
 
-import { DEFAULT_NOTES_COUNT, DEFAULT_NOTES_FILTER, NATURAL_NOTES_COUNT } from './consts';
+import { DEFAULT_NOTES_COUNT, DEFAULT_NOTES_FILTER, NoteSetFilter } from './consts';
 import { Notes } from './components/Notes';
 import { Settings } from './components/Settings';
 
-import { getNotes, NoteSetFilter } from './utils/noteHelpers';
+import { getNotes } from './utils/noteHelpers';
 
 const App = () => {
   const windowSize = useWindowSize();
@@ -28,13 +28,6 @@ const App = () => {
     }
     changeNotes();
   }, [changeNotes, timerDelay, setTimerDelay]);
-
-  // reduce count if filter returns less notes
-  useEffect(() => {
-    if (filter === 'naturals' && count > NATURAL_NOTES_COUNT) {
-      setCount(NATURAL_NOTES_COUNT);
-    }
-  }, [filter, count]);
 
   useInterval(changeNotes, timerDelay);
 
