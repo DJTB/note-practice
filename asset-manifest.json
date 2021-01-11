@@ -1,22 +1,22 @@
 {
   "files": {
     "main.css": "/note-practice/static/css/main.90004068.chunk.css",
-    "main.js": "/note-practice/static/js/main.bf554554.chunk.js",
-    "main.js.map": "/note-practice/static/js/main.bf554554.chunk.js.map",
+    "main.js": "/note-practice/static/js/main.de3e7d51.chunk.js",
+    "main.js.map": "/note-practice/static/js/main.de3e7d51.chunk.js.map",
     "runtime-main.js": "/note-practice/static/js/runtime-main.e596aedc.js",
     "runtime-main.js.map": "/note-practice/static/js/runtime-main.e596aedc.js.map",
-    "static/js/2.a8f965dc.chunk.js": "/note-practice/static/js/2.a8f965dc.chunk.js",
-    "static/js/2.a8f965dc.chunk.js.map": "/note-practice/static/js/2.a8f965dc.chunk.js.map",
+    "static/js/2.b5b175c7.chunk.js": "/note-practice/static/js/2.b5b175c7.chunk.js",
+    "static/js/2.b5b175c7.chunk.js.map": "/note-practice/static/js/2.b5b175c7.chunk.js.map",
     "index.html": "/note-practice/index.html",
-    "precache-manifest.e0766570769686f04e93fbd50da029ca.js": "/note-practice/precache-manifest.e0766570769686f04e93fbd50da029ca.js",
+    "precache-manifest.f55507667377efbf2ae7f4c2734c27fa.js": "/note-practice/precache-manifest.f55507667377efbf2ae7f4c2734c27fa.js",
     "service-worker.js": "/note-practice/service-worker.js",
     "static/css/main.90004068.chunk.css.map": "/note-practice/static/css/main.90004068.chunk.css.map",
-    "static/js/2.a8f965dc.chunk.js.LICENSE.txt": "/note-practice/static/js/2.a8f965dc.chunk.js.LICENSE.txt"
+    "static/js/2.b5b175c7.chunk.js.LICENSE.txt": "/note-practice/static/js/2.b5b175c7.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.e596aedc.js",
-    "static/js/2.a8f965dc.chunk.js",
+    "static/js/2.b5b175c7.chunk.js",
     "static/css/main.90004068.chunk.css",
-    "static/js/main.bf554554.chunk.js"
+    "static/js/main.de3e7d51.chunk.js"
   ]
 }
