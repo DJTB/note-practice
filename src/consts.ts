@@ -2,9 +2,11 @@ import { omitBy } from './utils/omitBy';
 
 export type NoteLetter = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G';
 export type NoteMod = '♯' | '♭';
+export type ChordMod = 'M' | 'm'; // TODO: sus, diminished etc - could use –+Δo7 etc
 
 export type NoteSetFilter =
   | 'any'
+  | 'any-add-minor'
   | 'naturals'
   | 'sharps'
   | 'flats'
@@ -33,6 +35,7 @@ export const NOTE_COLORS = {
 
 export const NOTE_FILTERS: { label: string; value: NoteSetFilter }[] = [
   { label: 'Any', value: 'any' },
+  { label: 'Any + Minor', value: 'any-add-minor' },
   { label: 'Naturals Only', value: 'naturals' },
   { label: 'Naturals + Flats', value: 'flats' },
   { label: 'Naturals + Sharps', value: 'sharps' },

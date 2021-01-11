@@ -17,15 +17,19 @@ export type NoteSetConfig = {
   randomize?: boolean;
 };
 
-export const getOctaveSet = ({ flats = false, sharps = false } = {}) => {
-  if (flats) return [...NATURAL_NOTES, ...FLAT_NOTES];
-  if (sharps) return [...NATURAL_NOTES, ...SHARP_NOTES];
-  return [...NATURAL_NOTES];
+export const getOctaveSet = ({ flats = false, sharps = false, minors = false } = {}) => {
+  let notes: string[] = [...NATURAL_NOTES];
+
+  if (flats) notes = [...NATURAL_NOTES, ...FLAT_NOTES];
+  if (sharps) notes = [...NATURAL_NOTES, ...SHARP_NOTES];
+  if (minors) notes = notes.map((n) => (Math.random() >= 0.6 ? n + 'm' : n));
+
+  return notes;
 };
 
-export const getRandomSet = () => {
-  const useFlats = Math.random() > 0.5;
-  return getOctaveSet({ flats: useFlats, sharps: !useFlats });
+export const getRandomSet = ({ minors = false } = {}) => {
+  const useFlats = Math.random() >= 0.5;
+  return getOctaveSet({ flats: useFlats, sharps: !useFlats, minors });
 };
 
 export const getInversionSets = () => [...INVERSION_GROUPS];
@@ -40,6 +44,8 @@ export const getNoteSet = (key: NoteSetFilter) => {
   switch (key) {
     case 'any':
       return shuffle(getRandomSet());
+    case 'any-add-minor':
+      return shuffle(getRandomSet({ minors: true }));
     case 'naturals':
       return shuffle(getOctaveSet());
     case 'flats':
