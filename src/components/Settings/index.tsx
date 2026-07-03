@@ -1,10 +1,13 @@
-import React, { useCallback, Dispatch, SetStateAction, FC, memo } from 'react';
+import { useCallback, Dispatch, SetStateAction, FC, memo, ChangeEvent, FocusEvent } from 'react';
 
-import { NATURAL_NOTES_COUNT, MAX_NOTES_COUNT, NoteSetFilter } from '../../consts';
+import { NATURAL_NOTES_COUNT, MAX_NOTES_COUNT } from '../../consts';
+import { NoteSetFilter } from '../../noteSets';
 
 import { Filter } from './Filter';
 import { Timer } from './Timer';
 import { Count } from './Count';
+
+type InputEvent = ChangeEvent<HTMLInputElement> | FocusEvent<HTMLInputElement>;
 
 // seconds -> ms | null
 const parseDelay = (timerDelay: string): number | null => {
@@ -19,20 +22,20 @@ export const Settings: FC<{
   setTimerDelay: Dispatch<SetStateAction<number | null>>;
   setCount: Dispatch<SetStateAction<number>>;
   setFilter: Dispatch<SetStateAction<NoteSetFilter>>;
-  changeNotes: (overrides?: { filter?: number; count?: number }) => void;
+  changeNotes: (overrides?: { filter?: NoteSetFilter; count?: number }) => void;
 }> = memo(({ filter, count, setTimerDelay, setCount, setFilter, changeNotes }) => {
   const maxNoteCount = filter === 'naturals' ? NATURAL_NOTES_COUNT : MAX_NOTES_COUNT;
 
   const handleDelayChange = useCallback(
-    ({ target }) => {
+    ({ target }: InputEvent) => {
       setTimerDelay(parseDelay(target.value));
     },
     [setTimerDelay]
   );
 
   const handleCountChange = useCallback(
-    ({ target }) => {
-      const count = target.value;
+    ({ target }: InputEvent) => {
+      const count = parseInt(target.value);
       setCount(count);
       changeNotes({ count });
     },
@@ -40,8 +43,8 @@ export const Settings: FC<{
   );
 
   const handleFilterChange = useCallback(
-    ({ target }) => {
-      const filter = target.value;
+    ({ target }: ChangeEvent<HTMLSelectElement>) => {
+      const filter = target.value as NoteSetFilter;
       setFilter(filter);
       changeNotes({ filter });
     },

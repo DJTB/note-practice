@@ -1,0 +1,7 @@
+@import 'tailwindcss';
+
+/* Ported from the old tailwind.config.js theme.extend.fontSize. */
+@theme {
+  --text-auto-size: calc(1.5rem + 16 * (100vw - 320px) / (960 - 320));
+  --text-xxs: 0.5rem;
+}
