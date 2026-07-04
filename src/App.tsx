@@ -1,14 +1,12 @@
-import React, { useCallback, useState } from 'react';
-import { useWindowSize, useInterval } from 'react-use';
+import { useCallback, useState } from 'react';
 
-import { DEFAULT_NOTES_COUNT, DEFAULT_NOTES_FILTER, NoteSetFilter } from './consts';
+import { DEFAULT_NOTES_COUNT } from './consts';
+import { DEFAULT_NOTES_FILTER, getNotes, NoteSetFilter } from './noteSets';
 import { Notes } from './components/Notes';
 import { Settings } from './components/Settings';
-
-import { getNotes } from './utils/noteHelpers';
+import { useInterval } from './useInterval';
 
 const App = () => {
-  const windowSize = useWindowSize();
   const [count, setCount] = useState(DEFAULT_NOTES_COUNT);
   const [filter, setFilter] = useState<NoteSetFilter>(DEFAULT_NOTES_FILTER);
   const [notes, setNotes] = useState(getNotes({ filter, count }));
@@ -32,7 +30,7 @@ const App = () => {
   useInterval(changeNotes, timerDelay);
 
   return (
-    <div className="flex flex-col bg-gray-900" style={{ height: windowSize.height }}>
+    <div className="flex flex-col h-dvh bg-gray-900">
       <div className="flex-1 w-full max-w-6xl p-4 mx-auto select-none" onClick={handleTap}>
         <Notes notes={notes} />
       </div>

@@ -1,17 +1,18 @@
-import React, { ChangeEventHandler, FC, useCallback, useRef } from 'react';
-import TextField from '@material-ui/core/TextField';
+import { ChangeEvent, FC, FocusEvent, useCallback, useRef } from 'react';
 import { DEFAULT_NOTES_COUNT } from '../../consts';
+import { Label } from './Label';
+
+type InputEvent = ChangeEvent<HTMLInputElement> | FocusEvent<HTMLInputElement>;
 
 export const Count: FC<{
   value: number;
   max: number;
-  onChange: ChangeEventHandler;
+  onChange: (event: InputEvent) => void;
 }> = ({ value, max, onChange }) => {
-  const inputRef = useRef<HTMLInputElement>(null);
-  const lastValidValue = useRef(DEFAULT_NOTES_COUNT);
+  const lastValidValue = useRef(String(DEFAULT_NOTES_COUNT));
 
   const handleChange = useCallback(
-    (ev) => {
+    (ev: ChangeEvent<HTMLInputElement>) => {
       let newValue = ev.target.value;
       const num = parseInt(ev.target.value);
 
@@ -34,9 +35,9 @@ export const Count: FC<{
   );
 
   const handleBlur = useCallback(
-    (ev) => {
+    (ev: FocusEvent<HTMLInputElement>) => {
       // input empty/invalid, reset to last valid value
-      if (!Number.isFinite(ev.target.value)) {
+      if (!Number.isFinite(parseInt(ev.target.value))) {
         ev.target.value = lastValidValue.current;
       }
 
@@ -46,16 +47,16 @@ export const Count: FC<{
   );
 
   return (
-    <TextField
-      id="note-count"
-      className="w-10 px-1"
-      ref={inputRef}
-      label="Count"
-      type="number"
-      value={value}
-      size="small"
-      onChange={handleChange}
-      onBlur={handleBlur}
-    />
+    <div className="flex items-center">
+      <Label name="note-count">Count</Label>
+      <input
+        id="note-count"
+        className="w-12 px-1 py-1 text-gray-900 bg-white border border-gray-400 rounded"
+        type="number"
+        value={value}
+        onChange={handleChange}
+        onBlur={handleBlur}
+      />
+    </div>
   );
 };
