@@ -37,3 +37,27 @@ _Avoid_: gap, distance, step.
 **Root**:
 The Note an Interval is measured from — the question in interval practice; transposing it by an Interval gives the answer Note.
 _Avoid_: start note, base, origin.
+
+**Challenge**:
+One interval-practice question: a Root plus an Interval. Shown as a prompt; tapping reveals its answer Note, tapping again draws the next. The interval-mode counterpart of a Note Set.
+_Avoid_: question, card, problem.
+
+**Practice mode**:
+Which drill the app is running — note practice or interval practice — chosen from the top-level switch. Each mode has its own session; the shell hosts whichever is active.
+_Avoid_: screen, tab, page, view.
+
+**Offset**:
+A Note's accidental as a signed semitone shift from its natural letter: 𝄫 −2, ♭ −1, ♮ 0, ♯ +1, 𝄪 +2. Note practice uses only −1..+1; interval answers may reach ±2.
+_Avoid_: accidental value, shift amount.
+
+**Pitch class**:
+The 0–11 chromatic value a Note sounds (letter + offset, mod 12). Enharmonic Notes share a pitch class (A♯ and B♭ are both 10).
+_Avoid_: pitch, semitone, tone.
+
+**Transpose**:
+Compute the theory-correct answer Note an Interval above a Root — the answer's letter is advanced by the Interval's letter-steps, its offset set to hit the semitone count. The domain's source of truth; may yield a double accidental.
+_Avoid_: shift, move, add.
+
+**Simplify**:
+Re-spell any Note as its enharmonic-simplest name (0–1 accidental) for display. Never the source of truth — a render-leaf concern, like formatting. See ADR-0005.
+_Avoid_: normalise, reduce, resolve.

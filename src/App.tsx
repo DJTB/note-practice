@@ -1,30 +1,20 @@
-import { Notes } from './components/Notes';
-import { Settings } from './components/Settings';
-import { usePracticeSession } from './usePracticeSession';
+import { useState } from 'react';
+
+import { IntervalPractice } from './components/IntervalPractice';
+import { ModeSwitch, type PracticeMode } from './components/ModeSwitch';
+import { NotePractice } from './components/NotePractice';
 
 const App = () => {
-  const { notes, filter, setFilter, count, setCount, maxCount, setTimerSeconds, refresh } =
-    usePracticeSession();
+  const [mode, setMode] = useState<PracticeMode>('notes');
+  const header = <ModeSwitch mode={mode} setMode={setMode} />;
 
-  return (
-    <div className="flex flex-col h-dvh bg-gray-900">
-      <div className="flex-1 w-full max-w-6xl p-4 mx-auto select-none" onClick={refresh}>
-        <Notes notes={notes} />
-      </div>
-      <div className="my-4 text-sm italic text-center text-gray-100 opacity-25">
-        Tap screen to refresh notes
-      </div>
-      <div className="grid grid-rows-3 px-4 pt-4 bg-gray-300 md:grid-cols-3 md:grid-rows-1">
-        <Settings
-          filter={filter}
-          setFilter={setFilter}
-          count={count}
-          maxCount={maxCount}
-          setCount={setCount}
-          setTimerSeconds={setTimerSeconds}
-        />
-      </div>
-    </div>
+  // Only the active mode is mounted, so exactly one session (and its timer)
+  // ever runs — switching modes tears the other down rather than leaving it
+  // ticking in the background.
+  return mode === 'intervals' ? (
+    <IntervalPractice header={header} />
+  ) : (
+    <NotePractice header={header} />
   );
 };
 
