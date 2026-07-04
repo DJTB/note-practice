@@ -5,6 +5,7 @@ import { DEFAULT_NOTES_FILTER, getNotes, type NoteSetFilter } from './noteSets';
 import { defaultRandom, type Random } from './random';
 import type { Note } from './note';
 import { useInterval } from './useInterval';
+import { useAutoAdvanceTimer } from './useAutoAdvanceTimer';
 
 // The maximum notes a filter can offer: naturals is a seven-note octave,
 // every other filter is a full twelve.
@@ -13,13 +14,6 @@ const maxCountFor = (filter: NoteSetFilter): number =>
 
 const clamp = (value: number, min: number, max: number): number =>
   Math.min(Math.max(value, min), max);
-
-// seconds -> interval delay in ms, or null to pause. Zero, negative, or
-// non-numeric input all pause the timer.
-const secondsToDelay = (seconds: number | null): number | null => {
-  if (seconds === null || !Number.isFinite(seconds) || seconds <= 0) return null;
-  return seconds * 1000;
-};
 
 export type PracticeSession = {
   notes: Note[];
@@ -43,10 +37,7 @@ export const usePracticeSession = (rng: Random = defaultRandom): PracticeSession
   const [notes, setNotes] = useState<Note[]>(() =>
     getNotes({ filter: DEFAULT_NOTES_FILTER, count: DEFAULT_NOTES_COUNT }, rng)
   );
-  // null pauses the timer; a positive number is the auto-refresh delay in ms.
-  const [timerDelay, setTimerDelay] = useState<number | null>(null);
-  // Bumped on every refresh to restart the interval — the hidden reset-on-tap.
-  const [timerNonce, setTimerNonce] = useState(0);
+  const timer = useAutoAdvanceTimer();
 
   const maxCount = maxCountFor(filter);
 
@@ -61,8 +52,8 @@ export const usePracticeSession = (rng: Random = defaultRandom): PracticeSession
 
   const refresh = useCallback(() => {
     regenerate(filter, count);
-    setTimerNonce((nonce) => nonce + 1);
-  }, [filter, count, regenerate]);
+    timer.reset();
+  }, [filter, count, regenerate, timer]);
 
   const setFilter = useCallback(
     (next: NoteSetFilter) => {
@@ -83,11 +74,7 @@ export const usePracticeSession = (rng: Random = defaultRandom): PracticeSession
     [filter, regenerate]
   );
 
-  const setTimerSeconds = useCallback((seconds: number | null) => {
-    setTimerDelay(secondsToDelay(seconds));
-  }, []);
-
-  useInterval(refresh, timerDelay, timerNonce);
+  useInterval(refresh, timer.delay, timer.nonce);
 
   return {
     notes,
@@ -96,7 +83,7 @@ export const usePracticeSession = (rng: Random = defaultRandom): PracticeSession
     count,
     setCount,
     maxCount,
-    setTimerSeconds,
+    setTimerSeconds: timer.setTimerSeconds,
     refresh,
   };
 };
