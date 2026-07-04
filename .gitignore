@@ -8,8 +8,8 @@
 # testing
 /coverage
 
-# production
-/build
+# production (Vite build output; published to the gh-pages branch via `npm run deploy`)
+/dist
 
 # misc
 .DS_Store
