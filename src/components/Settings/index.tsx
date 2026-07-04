@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, FocusEvent, memo, useCallback } from 'react';
+import { ChangeEvent, FC, memo, useCallback } from 'react';
 
 import { NoteSetFilter } from '../../noteSets';
 
@@ -6,11 +6,9 @@ import { Filter } from './Filter';
 import { Timer } from './Timer';
 import { Count } from './Count';
 
-type InputEvent = ChangeEvent<HTMLInputElement> | FocusEvent<HTMLInputElement>;
-
-// The DOM adapter: it turns raw input events into domain calls on the session's
-// setters. All parse/clamp lives in the leaf controls (Count/Timer) and the
-// session enforces its own invariants — Settings only translates.
+// The settings row wires the session's domain setters to the three controls.
+// Count and Timer own their own parse/clamp (via useClampedNumberInput); Filter
+// is a plain select. Settings only forwards.
 export const Settings: FC<{
   filter: NoteSetFilter;
   count: number;
@@ -24,26 +22,16 @@ export const Settings: FC<{
     [setFilter]
   );
 
-  const handleCountChange = useCallback(
-    ({ target }: InputEvent) => setCount(parseInt(target.value)),
-    [setCount]
-  );
-
-  const handleTimerChange = useCallback(
-    ({ target }: InputEvent) => setTimerSeconds(parseInt(target.value)),
-    [setTimerSeconds]
-  );
-
   return (
     <>
       <div className="flex justify-center mb-4 md:justify-start">
         <Filter value={filter} onChange={handleFilterChange} />
       </div>
       <div className="flex justify-center mb-4 ">
-        <Timer onChange={handleTimerChange} />
+        <Timer onValue={setTimerSeconds} />
       </div>
       <div className="flex justify-center mb-4 md:justify-end">
-        <Count value={count} max={maxCount} onChange={handleCountChange} />
+        <Count value={count} max={maxCount} onValue={setCount} />
       </div>
     </>
   );
