@@ -1,6 +1,5 @@
-import { useCallback, Dispatch, SetStateAction, FC, memo, ChangeEvent, FocusEvent } from 'react';
+import { ChangeEvent, FC, FocusEvent, memo, useCallback } from 'react';
 
-import { NATURAL_NOTES_COUNT, MAX_NOTES_COUNT } from '../../consts';
 import { NoteSetFilter } from '../../noteSets';
 
 import { Filter } from './Filter';
@@ -9,46 +8,30 @@ import { Count } from './Count';
 
 type InputEvent = ChangeEvent<HTMLInputElement> | FocusEvent<HTMLInputElement>;
 
-// seconds -> ms | null
-const parseDelay = (timerDelay: string): number | null => {
-  const val = parseInt(timerDelay);
-  const shouldReset = !Number.isFinite(val) || val <= 0;
-  return shouldReset ? null : val * 1000;
-};
-
+// The DOM adapter: it turns raw input events into domain calls on the session's
+// setters. All parse/clamp lives in the leaf controls (Count/Timer) and the
+// session enforces its own invariants — Settings only translates.
 export const Settings: FC<{
   filter: NoteSetFilter;
   count: number;
-  setTimerDelay: Dispatch<SetStateAction<number | null>>;
-  setCount: Dispatch<SetStateAction<number>>;
-  setFilter: Dispatch<SetStateAction<NoteSetFilter>>;
-  changeNotes: (overrides?: { filter?: NoteSetFilter; count?: number }) => void;
-}> = memo(({ filter, count, setTimerDelay, setCount, setFilter, changeNotes }) => {
-  const maxNoteCount = filter === 'naturals' ? NATURAL_NOTES_COUNT : MAX_NOTES_COUNT;
-
-  const handleDelayChange = useCallback(
-    ({ target }: InputEvent) => {
-      setTimerDelay(parseDelay(target.value));
-    },
-    [setTimerDelay]
+  maxCount: number;
+  setFilter: (filter: NoteSetFilter) => void;
+  setCount: (count: number) => void;
+  setTimerSeconds: (seconds: number | null) => void;
+}> = memo(({ filter, count, maxCount, setFilter, setCount, setTimerSeconds }) => {
+  const handleFilterChange = useCallback(
+    ({ target }: ChangeEvent<HTMLSelectElement>) => setFilter(target.value as NoteSetFilter),
+    [setFilter]
   );
 
   const handleCountChange = useCallback(
-    ({ target }: InputEvent) => {
-      const count = parseInt(target.value);
-      setCount(count);
-      changeNotes({ count });
-    },
-    [setCount, changeNotes]
+    ({ target }: InputEvent) => setCount(parseInt(target.value)),
+    [setCount]
   );
 
-  const handleFilterChange = useCallback(
-    ({ target }: ChangeEvent<HTMLSelectElement>) => {
-      const filter = target.value as NoteSetFilter;
-      setFilter(filter);
-      changeNotes({ filter });
-    },
-    [setFilter, changeNotes]
+  const handleTimerChange = useCallback(
+    ({ target }: InputEvent) => setTimerSeconds(parseInt(target.value)),
+    [setTimerSeconds]
   );
 
   return (
@@ -57,10 +40,10 @@ export const Settings: FC<{
         <Filter value={filter} onChange={handleFilterChange} />
       </div>
       <div className="flex justify-center mb-4 ">
-        <Timer onChange={handleDelayChange} />
+        <Timer onChange={handleTimerChange} />
       </div>
       <div className="flex justify-center mb-4 md:justify-end">
-        <Count value={count} max={maxNoteCount} onChange={handleCountChange} />
+        <Count value={count} max={maxCount} onChange={handleCountChange} />
       </div>
     </>
   );
