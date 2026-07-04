@@ -29,3 +29,11 @@ The sequence of notes each a fifth apart. One basis for a Filter.
 
 **Inversion Group**:
 A cluster of notes treated as related for inversion practice (e.g. C/F/G). One basis for a Filter.
+
+**Interval**:
+The distance between two Notes, named by its number and quality (e.g. major 3rd, tritone). Modelled as a letter-step count plus a semitone count, so its spelling is theory-correct. One of an ordered registry, parallel to Filter.
+_Avoid_: gap, distance, step.
+
+**Root**:
+The Note an Interval is measured from — the question in interval practice; transposing it by an Interval gives the answer Note.
+_Avoid_: start note, base, origin.
