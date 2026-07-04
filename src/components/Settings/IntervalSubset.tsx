@@ -9,7 +9,7 @@ export const IntervalSubset: FC<{
   toggle: (name: IntervalName) => void;
 }> = ({ enabled, toggle }) => (
   <fieldset className="text-center">
-    <legend className="mb-2 text-gray-400">Intervals</legend>
+    <legend className="mb-2 text-gray-500">Intervals</legend>
     <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
       {INTERVALS.map(({ name }) => (
         <label key={name} className="flex items-center gap-1 text-gray-700">
