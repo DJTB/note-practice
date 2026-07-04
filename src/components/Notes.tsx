@@ -5,7 +5,7 @@ import { format, type Note } from '../note';
 
 export const Notes: FC<{ notes: Note[] }> = ({ notes = [] }) => {
   return (
-    <div className="flex flex-wrap items-center content-center justify-center gap-4">
+    <div className="flex flex-wrap items-center content-center justify-center h-full gap-4">
       {notes.map((note, index) => {
         const colorClass = NOTE_COLORS[note.letter];
         return <NoteView key={format(note) + index} colorClass={colorClass} text={format(note)} />;
