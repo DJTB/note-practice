@@ -1,25 +1,33 @@
 import { describe, it, expect } from 'vitest';
 import { getNotes, noteSets, NOTE_FILTERS } from './noteSets';
 import { createRandom, type Random } from './random';
+import { format, natural, type Note } from './note';
 import { NATURAL_NOTES, FLAT_NOTES, SHARP_NOTES, CIRCLE_OF_FIFTHS } from './consts';
 
-const letter = (note: string) => note[0];
+const asFormatted = (notes: Note[]) => notes.map(format).sort();
 const asSet = (arr: string[]) => [...arr].sort();
 
 describe('getNotes per filter (seeded Random)', () => {
   it('naturals returns the seven natural letters', () => {
     const notes = getNotes({ filter: 'naturals', count: 7 }, createRandom(1));
-    expect(asSet(notes)).toEqual(asSet(NATURAL_NOTES));
+    expect(asSet(notes.map((n) => n.letter))).toEqual(asSet(NATURAL_NOTES));
+    expect(notes.every((n) => n.offset === 0 && n.quality === undefined)).toBe(true);
   });
 
   it('flats draws from naturals plus flats', () => {
     const notes = getNotes({ filter: 'flats', count: 12 }, createRandom(1));
-    expect(asSet(notes)).toEqual(asSet([...NATURAL_NOTES, ...FLAT_NOTES]));
+    expect(asFormatted(notes)).toEqual(
+      asFormatted([...NATURAL_NOTES.map(natural), ...FLAT_NOTES])
+    );
+    expect(notes.some((n) => format(n).endsWith('♭'))).toBe(true);
   });
 
   it('sharps draws from naturals plus sharps', () => {
     const notes = getNotes({ filter: 'sharps', count: 12 }, createRandom(1));
-    expect(asSet(notes)).toEqual(asSet([...NATURAL_NOTES, ...SHARP_NOTES]));
+    expect(asFormatted(notes)).toEqual(
+      asFormatted([...NATURAL_NOTES.map(natural), ...SHARP_NOTES])
+    );
+    expect(notes.some((n) => format(n).endsWith('♯'))).toBe(true);
   });
 
   it('fifths returns the circle of fifths in order', () => {
@@ -30,7 +38,7 @@ describe('getNotes per filter (seeded Random)', () => {
   it('any yields a full octave of naturals plus one accidental family', () => {
     const notes = getNotes({ filter: 'any', count: 12 }, createRandom(1));
     expect(notes).toHaveLength(12);
-    const letters = notes.map(letter);
+    const letters = notes.map((n) => n.letter);
     expect(asSet([...new Set(letters)])).toEqual(asSet(NATURAL_NOTES));
   });
 
@@ -59,7 +67,7 @@ describe('40% minor probability (any-add-minor)', () => {
     for (let round = 0; round < 3000; round++) {
       const notes = getNotes({ filter: 'any-add-minor', count: 12 }, rng);
       total += notes.length;
-      minors += notes.filter((n) => n.endsWith('m')).length;
+      minors += notes.filter((n) => n.quality === 'minor').length;
     }
     expect(minors / total).toBeCloseTo(0.4, 1);
   });
@@ -69,8 +77,15 @@ describe('40% minor probability (any-add-minor)', () => {
     // Stub: never flat (use sharps), always minor; identity shuffle.
     const stub: Random = { chance: (p) => p !== 0.5, shuffle: (arr) => arr };
     const notes = getNotes({ filter: 'any-add-minor', count: 12 }, stub);
-    expect(notes.every((n) => n.endsWith('m'))).toBe(true);
-    expect(notes.map((n) => n.replace(/m$/, ''))).toEqual([...NATURAL_NOTES, ...SHARP_NOTES]);
+    expect(notes.every((n) => n.quality === 'minor')).toBe(true);
+    expect(notes.every((n) => format(n).endsWith('m'))).toBe(true);
+    const bases = notes.map((n) => ({ letter: n.letter, offset: n.offset }));
+    expect(bases).toEqual(
+      [...NATURAL_NOTES.map(natural), ...SHARP_NOTES].map((n) => ({
+        letter: n.letter,
+        offset: n.offset,
+      }))
+    );
   });
 });
 
