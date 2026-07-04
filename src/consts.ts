@@ -1,7 +1,7 @@
 import { omitBy } from './utils/omitBy';
+import { flat, natural, sharp, type Note } from './note';
 
 export type NoteLetter = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G';
-export type NoteMod = '♯' | '♭';
 export type ChordMod = 'M' | 'm'; // TODO: sus, diminished etc - could use –+Δo7 etc
 
 export const DEFAULT_NOTES_COUNT = 12;
@@ -22,21 +22,52 @@ export const NOTE_COLORS: Record<NoteLetter, string> = {
 };
 
 export const NATURAL_NOTES: NoteLetter[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
-export const SHARP_NOTES = omitBy(NATURAL_NOTES, ['B', 'E']).map((note) => note + '♯');
-export const FLAT_NOTES = omitBy(NATURAL_NOTES, ['C', 'F']).map((note) => note + '♭');
+export const SHARP_NOTES: Note[] = omitBy<NoteLetter>(NATURAL_NOTES, ['B', 'E']).map(sharp);
+export const FLAT_NOTES: Note[] = omitBy<NoteLetter>(NATURAL_NOTES, ['C', 'F']).map(flat);
 
-export const INVERSION_GROUPS = [
-  ['C', 'F', 'G'],
-  ['A', 'D', 'E'],
-  ['Ab', 'Db', 'Eb'],
-  ['B', 'Bb', 'Gb'],
+export const INVERSION_GROUPS: Note[][] = [
+  [natural('C'), natural('F'), natural('G')],
+  [natural('A'), natural('D'), natural('E')],
+  [flat('A'), flat('D'), flat('E')],
+  [natural('B'), flat('B'), flat('G')],
 ];
 
-export const CIRCLE_OF_FIFTHS = ['C', 'F', 'Bb', 'Eb', 'Ab', 'Db', 'Gb', 'B', 'E', 'A', 'D', 'G'];
+export const CIRCLE_OF_FIFTHS: Note[] = [
+  natural('C'),
+  natural('F'),
+  flat('B'),
+  flat('E'),
+  flat('A'),
+  flat('D'),
+  flat('G'),
+  natural('B'),
+  natural('E'),
+  natural('A'),
+  natural('D'),
+  natural('G'),
+];
 
 // Parked: raw data for the fifths-flats / fifths-sharps filters. Left out of the
 // note-set registry (unshippable until verified) but retained here — see noteSets.ts.
 /* Are these all Major? */
 /* Are these actually in the right order ?*/
-export const CIRCLE_OF_FIFTHS_FLATS = ['C', 'F', 'Bb', 'Eb', 'Ab', 'Db', 'Gb', 'Cb'];
-export const CIRCLE_OF_FIFTHS_SHARPS = ['C', 'G', 'D', 'A', 'E', 'B', 'F#', 'C#'];
+export const CIRCLE_OF_FIFTHS_FLATS: Note[] = [
+  natural('C'),
+  natural('F'),
+  flat('B'),
+  flat('E'),
+  flat('A'),
+  flat('D'),
+  flat('G'),
+  flat('C'),
+];
+export const CIRCLE_OF_FIFTHS_SHARPS: Note[] = [
+  natural('C'),
+  natural('G'),
+  natural('D'),
+  natural('A'),
+  natural('E'),
+  natural('B'),
+  sharp('F'),
+  sharp('C'),
+];

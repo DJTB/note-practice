@@ -5,6 +5,7 @@ import {
   NATURAL_NOTES,
   SHARP_NOTES,
 } from './consts';
+import { minor, natural, type Note } from './note';
 import { defaultRandom, type Random } from './random';
 
 // Probability a note is presented as minor (see PRD — preserved exactly).
@@ -15,18 +16,19 @@ const MINOR_PROBABILITY = 0.4;
 const getOctaveSet = (
   rng: Random,
   { flats = false, sharps = false, minors = false } = {}
-): string[] => {
-  let notes: string[] = [...NATURAL_NOTES];
+): Note[] => {
+  const naturals = NATURAL_NOTES.map(natural);
+  let notes: Note[] = naturals;
 
-  if (flats) notes = [...NATURAL_NOTES, ...FLAT_NOTES];
-  if (sharps) notes = [...NATURAL_NOTES, ...SHARP_NOTES];
-  if (minors) notes = notes.map((n) => (rng.chance(MINOR_PROBABILITY) ? n + 'm' : n));
+  if (flats) notes = [...naturals, ...FLAT_NOTES];
+  if (sharps) notes = [...naturals, ...SHARP_NOTES];
+  if (minors) notes = notes.map((n) => (rng.chance(MINOR_PROBABILITY) ? minor(n) : n));
 
   return notes;
 };
 
 // A full octave that randomly leans flat or sharp (a fair coin flip).
-const getRandomSet = (rng: Random, { minors = false } = {}): string[] => {
+const getRandomSet = (rng: Random, { minors = false } = {}): Note[] => {
   const useFlats = rng.chance(0.5);
   return getOctaveSet(rng, { flats: useFlats, sharps: !useFlats, minors });
 };
@@ -82,7 +84,7 @@ export type NoteSetConfig = {
 export const getNotes = (
   { filter = DEFAULT_NOTES_FILTER, count = 6 }: NoteSetConfig = {},
   rng: Random = defaultRandom
-): string[] => {
+): Note[] => {
   const noteSet = noteSets.find((set) => set.id === filter) ?? noteSets[0];
   return noteSet.generate(rng).slice(0, count);
 };

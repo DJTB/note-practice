@@ -1,19 +1,20 @@
 import { FC } from 'react';
 
-import { NOTE_COLORS, NoteLetter } from '../consts';
+import { NOTE_COLORS } from '../consts';
+import { format, type Note } from '../note';
 
-export const Notes: FC<{ notes: string[] }> = ({ notes = [] }) => {
+export const Notes: FC<{ notes: Note[] }> = ({ notes = [] }) => {
   return (
     <div className="flex flex-wrap items-center content-center justify-center gap-4">
       {notes.map((note, index) => {
-        const colorClass = NOTE_COLORS[note[0] as NoteLetter];
-        return <Note key={note + index} colorClass={colorClass} text={note} />;
+        const colorClass = NOTE_COLORS[note.letter];
+        return <NoteView key={format(note) + index} colorClass={colorClass} text={format(note)} />;
       })}
     </div>
   );
 };
 
-export const Note: FC<{
+export const NoteView: FC<{
   colorClass: string;
   text: string;
 }> = ({ text, colorClass }) => {
