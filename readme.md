@@ -1,6 +1,6 @@
 # Note practice
 
-A drilling tool for practising musical-note recall.
+A drilling tool for running through piano drills like scales and chord patterns.
 
 Two modes:
 
